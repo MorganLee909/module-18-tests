@@ -27,16 +27,16 @@ module.exports = {
         return Promise.all(promises);
     },
 
-    test: function(response, dbData){
-        if(dbData.length === 0) console.error("Users not added to database");
-        if(dbData.length < 2) console.error("Only one user created");
-        if(dbData[0].username !== "Lee Morgan") console.error("Username incorrect");
-        if(dbData[0].email !== "me@leemorgan.io") console.error("Email incorrect");
+    test: function(response, userData){
+        if(userData.length === 0) console.error("CREATE USER: Users not added to database");
+        if(userData.length < 2) console.error("CREATE USER: Only one user created");
+        if(userData[0].username !== "Lucius Cornelius Sulla Felix") console.error("CREATE USER: Username incorrect");
+        if(userData[0].email !== "sulla@mail.com") console.error("CREATE USER: Email incorrect");
 
         try{
-            new User(response);
+            new User(response[0]);
         }catch(e){
-            console.error("User creation response is not User");
+            console.error("CREATE USER: User creation does not response with user data");
         }
     }
 }
