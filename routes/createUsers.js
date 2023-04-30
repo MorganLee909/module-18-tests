@@ -1,15 +1,17 @@
 const axios = require("axios");
 
+const User = require("../models/user.js");
+
 module.exports = {
-    run: function(){
+    run: async function(){
         let promises = [];
 
         promises.push(axios({
             url: "http://localhost:8000/api/users",
             method: "post",
             data: {
-                username: "Lee Morgan",
-                email: "me@leemorgan.io"
+                username: "Lucius Cornelius Sulla Felix",
+                email: "sulla@mail.com"
             }
         }));
 
@@ -17,8 +19,8 @@ module.exports = {
             url: "http://localhost:8000/api/users",
             method: "post",
             data: {
-                username: "Lee",
-                email: "lee@leemorgan.io"
+                username: "Gaius Marius",
+                email: "marius@mail.com"
             }
         }));
 
@@ -26,7 +28,15 @@ module.exports = {
     },
 
     test: function(response, dbData){
-        console.log(response);
-        console.log(dbData);
+        if(dbData.length === 0) console.error("Users not added to database");
+        if(dbData.length < 2) console.error("Only one user created");
+        if(dbData[0].username !== "Lee Morgan") console.error("Username incorrect");
+        if(dbData[0].email !== "me@leemorgan.io") console.error("Email incorrect");
+
+        try{
+            new User(response);
+        }catch(e){
+            console.error("User creation response is not User");
+        }
     }
 }
