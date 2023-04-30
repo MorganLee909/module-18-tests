@@ -10,6 +10,7 @@ const addFriends = require("./routes/addFriends.js");
 const updateUser = require("./routes/updateUser.js");
 const updateThought = require("./routes/updateThought.js");
 const getAllUsers = require("./routes/getAllUsers.js");
+const getAllThoughts = require("./routes/getAllThoughts.js");
 
 mongoose.connect(`mongodb://127.0.0.1:27017/${process.argv[2]}`);
 
@@ -42,6 +43,10 @@ let runTests = async ()=>{
     responseUsers = await getAllUsers.run();
     dbUsers = await User.find({});
     getAllUsers.test(responseUsers.data, dbUsers);
+
+    responseThoughts = await getAllThoughts.run();
+    dbThoughts = await Thought.find({});
+    getAllThoughts.test(responseThoughts.data, dbThoughts);
 
     await mongoose.connection.db.dropDatabase((err)=>{console.error(err)});
     mongoose.disconnect();

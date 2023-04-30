@@ -11,13 +11,14 @@ module.exports = {
     },
 
     test: function(response, users){
+        //Check basic data
         if(response.length === 0) console.error("GET ALL USERS: Empty response");
         if(response.length !== users.length) console.error("GET ALL USERS: Response does not match database contents");
         
         try{
             new User(response[0]);
         }catch(e){
-            console.error("GET ALL USERS: Response does not contain users");
+            console.error("GET ALL USERS: Response does not contain user objects");
         }
     }
 }
