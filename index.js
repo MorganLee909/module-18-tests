@@ -9,6 +9,7 @@ const createReactions = require("./routes/createReactions.js");
 const addFriends = require("./routes/addFriends.js");
 const updateUser = require("./routes/updateUser.js");
 const updateThought = require("./routes/updateThought.js");
+const getAllUsers = require("./routes/getAllUsers.js");
 
 mongoose.connect(`mongodb://127.0.0.1:27017/${process.argv[2]}`);
 
@@ -38,9 +39,13 @@ let runTests = async ()=>{
     dbThoughts = await Thought.findOne({_id: dbThoughts[1]._id});
     updateThought.test(responseThoughts, dbThoughts);
 
+    responseUsers = await getAllUsers.run();
+    dbUsers = await User.find({});
+    getAllUsers.test(responseUsers.data, dbUsers);
+
     await mongoose.connection.db.dropDatabase((err)=>{console.error(err)});
     mongoose.disconnect();
-    console.log("ALL TESTS HAVE RUN");
+    console.error("ALL TESTS HAVE RUN");
 }
 
 runTests();
