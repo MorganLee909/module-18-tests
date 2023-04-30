@@ -13,7 +13,7 @@ const ThoughtSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    reaction: []
+    reactions: []
 });
 
 module.exports = mongoose.model("Thought", ThoughtSchema);

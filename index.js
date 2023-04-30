@@ -5,6 +5,8 @@ const Thought = require("./models/thought.js");
 
 const createUsers = require("./routes/createUsers.js");
 const createThoughts = require("./routes/createThoughts.js");
+const createReactions = require("./routes/createReactions.js");
+const addFriends = require("./routes/addFriends.js");
 
 mongoose.connect(`mongodb://127.0.0.1:27017/${process.argv[2]}`);
 
@@ -18,7 +20,17 @@ let runTests = async ()=>{
     let dbThoughts = await Thought.find({});
     createThoughts.test([responseThoughts[0].data, responseThoughts[1].data], dbThoughts, dbUsers);
 
+    await createReactions.run([dbThoughts[0]._id.toString(), dbThoughts[1]._id.toString()]);
+    dbThoughts = await Thought.find({});
+    createReactions.test(dbThoughts);
+
+    await addFriends.run([dbUsers[0]._id.toString(), dbUsers[1]._id.toString()]);
+    dbUsers = await User.find({});
+    addFriends.test(dbUsers);
+
+    await mongoose.connection.db.dropDatabase((err)=>{console.error(err)});
     mongoose.disconnect();
+    console.log("ALL TESTS HAVE RUN");
 }
 
 runTests();
