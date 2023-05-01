@@ -36,7 +36,7 @@ module.exports = {
         try{
             new User(response[0]);
         }catch(e){
-            console.error("CREATE USER: User creation does not response with user data");
+            console.error("CREATE USER: User creation does not respond with user data");
         }
     }
 }

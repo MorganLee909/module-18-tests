@@ -14,6 +14,7 @@ const getAllThoughts = require("./routes/getAllThoughts.js");
 const getSingleUser = require("./routes/getSingleUser.js");
 const getSingleThought = require("./routes/getSingleThought.js");
 const deleteReaction = require("./routes/deleteReaction.js");
+const deleteThought = require("./routes/deleteThought.js");
 
 mongoose.connect(`mongodb://127.0.0.1:27017/${process.argv[2]}`);
 
@@ -34,6 +35,13 @@ let deleteReactionTest = async ()=>{
     await deleteReaction.run(thoughtId, reactionId);
     let dbThought = await Thought.findOne({_id: thoughtId});
     deleteReaction.test(dbThought, reactionId);
+}
+
+let deleteThoughtTest = async ()=>{
+    let thought = await Thought.findOne({});
+
+    await deleteThought.run(thought._id.toString());
+    await deleteThought.test(thought._id.toString());
 }
 
 let runTests = async ()=>{
@@ -78,7 +86,8 @@ let runTests = async ()=>{
     dbThoughts = await Thought.findOne({_id: dbThoughts[1]._id});
     getSingleThought.test(responseThoughts.data, dbThoughts);
 
-    await deleteReactionTest()
+    await deleteReactionTest();
+    await deleteThoughtTest();
 
     await mongoose.connection.db.dropDatabase((err)=>{console.error(err)});
     mongoose.disconnect();
