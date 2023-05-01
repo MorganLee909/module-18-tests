@@ -15,10 +15,11 @@ const getSingleUser = require("./routes/getSingleUser.js");
 const getSingleThought = require("./routes/getSingleThought.js");
 const deleteReaction = require("./routes/deleteReaction.js");
 const deleteThought = require("./routes/deleteThought.js");
+const deleteFriend = require("./routes/deleteFriend.js");
 
 mongoose.connect(`mongodb://127.0.0.1:27017/${process.argv[2]}`);
 
-let deleteReactionTest = async ()=>{
+let runDeleteReaction = async ()=>{
     let thoughts = await Thought.find({});
 
     let thoughtId = "";
@@ -37,11 +38,28 @@ let deleteReactionTest = async ()=>{
     deleteReaction.test(dbThought, reactionId);
 }
 
-let deleteThoughtTest = async ()=>{
+let runDeleteThought = async ()=>{
     let thought = await Thought.findOne({});
 
     await deleteThought.run(thought._id.toString());
     await deleteThought.test(thought._id.toString());
+}
+
+let runDeleteFriend = async ()=>{
+    let users = await User.find({});
+    let userId = "";
+    let friendId = "";
+
+    for(let i = 0; i < users.length; i++){
+        if(users[i].friends.length > 0){
+            userId = users[i]._id.toString();
+            friendId = users[i].friends[0].toString();
+            break;
+        }
+    }
+
+    await deleteFriend.run(userId, friendId);
+    await deleteFriend.test(userId, friendId);
 }
 
 let runTests = async ()=>{
@@ -86,8 +104,9 @@ let runTests = async ()=>{
     dbThoughts = await Thought.findOne({_id: dbThoughts[1]._id});
     getSingleThought.test(responseThoughts.data, dbThoughts);
 
-    await deleteReactionTest();
-    await deleteThoughtTest();
+    await runDeleteReaction();
+    await runDeleteThought();
+    await runDeleteFriend();
 
     await mongoose.connection.db.dropDatabase((err)=>{console.error(err)});
     mongoose.disconnect();
