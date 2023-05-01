@@ -1,7 +1,5 @@
 const axios = require("axios");
 
-const User = require("../models/user.js");
-
 module.exports = {
     run: async function(userId){        
         return await axios({

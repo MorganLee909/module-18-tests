@@ -12,6 +12,7 @@ const updateThought = require("./routes/updateThought.js");
 const getAllUsers = require("./routes/getAllUsers.js");
 const getAllThoughts = require("./routes/getAllThoughts.js");
 const getSingleUser = require("./routes/getSingleUser.js");
+const getSingleThought = require("./routes/getSingleThought.js");
 
 mongoose.connect(`mongodb://127.0.0.1:27017/${process.argv[2]}`);
 
@@ -52,6 +53,10 @@ let runTests = async ()=>{
     responseUsers = await getSingleUser.run(dbUsers[1]._id.toString());
     dbUsers = await User.findOne({_id: dbUsers[1]._id});
     getSingleUser.test(responseUsers.data, dbUsers);
+
+    responseThoughts = await getSingleThought.run(dbThoughts[1]._id.toString());
+    dbThoughts = await Thought.findOne({_id: dbThoughts[1]._id});
+    getSingleThought.test(responseThoughts.data, dbThoughts);
 
     await mongoose.connection.db.dropDatabase((err)=>{console.error(err)});
     mongoose.disconnect();
