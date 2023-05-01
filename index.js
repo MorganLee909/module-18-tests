@@ -16,6 +16,7 @@ const getSingleThought = require("./routes/getSingleThought.js");
 const deleteReaction = require("./routes/deleteReaction.js");
 const deleteThought = require("./routes/deleteThought.js");
 const deleteFriend = require("./routes/deleteFriend.js");
+const deleteUser = require("./routes/deleteUser.js");
 
 mongoose.connect(`mongodb://127.0.0.1:27017/${process.argv[2]}`);
 
@@ -60,6 +61,21 @@ let runDeleteFriend = async ()=>{
 
     await deleteFriend.run(userId, friendId);
     await deleteFriend.test(userId, friendId);
+}
+
+let runDeleteUser = async ()=>{
+    let users = await User.find({});
+    let user = {};
+
+    for(let i = 0; i < users.length; i++){
+        if(users[i].thoughts.length > 0){
+            user = users[i];
+            break;
+        }
+    }
+
+    await deleteUser.run(user._id.toString());
+    await deleteUser.test(user);
 }
 
 let runTests = async ()=>{
