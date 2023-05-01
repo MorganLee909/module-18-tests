@@ -123,6 +123,7 @@ let runTests = async ()=>{
     await runDeleteReaction();
     await runDeleteThought();
     await runDeleteFriend();
+    await runDeleteUser();
 
     await mongoose.connection.db.dropDatabase((err)=>{console.error(err)});
     mongoose.disconnect();
