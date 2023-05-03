@@ -86,6 +86,7 @@ let runTests = async ()=>{
     await updateUser.run();
     await updateThought.run();
     await getAllUsers.run();
+    await getAllThoughts.run();
 
     // let responseThoughts = await createThoughts.run([dbUsers[0]._id.toString(), dbUsers[1]._id.toString()]);
     // dbUsers = await User.find({});
