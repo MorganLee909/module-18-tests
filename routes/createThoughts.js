@@ -9,51 +9,35 @@ module.exports = {
         return [await createUser(), await createUser()];
     },
 
-    run: async function(ids){
+    run: async function(){
         let users = await this.setup();
 
-        let promises = [];
-
-        promises.push(axios({
-            url: "http://localhost:8000/api/thoughts",
-            method: "post",
-            data: {
-                userId: user[0]._id.toString(),
-                thoughtText: "No friend ever served me, and no enemy ever wronged me, whom I have not repaid in full.",
-                username: "Sulla"
-            }
-        }));
-
-        promises.push(axios({
+        let response = axios({
             url: "http://localhost:8000/api/thoughts",
             method: "post",
             data: {
                 userId: users[1]._id.toString(),
-                thoughtText: "The law speaks too softly to be heard amidst the din of arms.",
-                username: "Marius"
+                thoughtText: "No friend ever served me, and no enemy ever wronged me, whom I have not repaid in full.",
+                username: "Sulla"
             }
-        }));
+        });
 
-        this.test(Promise.all(promises));
+        await this.test(response.data, users[1]._id.toString());
     },
 
-    test: function(response, thoughts, users){
+    test: async function(response, userId){
+        let user = await User.findOne({_id: userId});
+        let thought = await Thought.findOne({});
+
         //Check for correct data
-        if(thoughts[0].thoughtText.length <= 0) console.error("CREATE THOUGHT: Thought text not saved");
-        if(thoughts[0].username.length <= 0) console.error("CREATE THOUGHT: Thought username not created");
-        if(users[0].thoughts.length === 0 || users[1].thoughts.length === 0) console.error("CREATE THOUGHT: Thought ID not saved to user");
-        
+        if(thought.thoughtText.length <= 0) console.error("CREATE THOUGHT: Thought text not saved");
+        if(thought.username.length <= 0) console.error("CREATE THOUGHT: Thought username not saved");
+
+        //Check that thought ID is saved to user
+        if(user.thoughts.length === 0) console.error("CREATE THOUGHT: Thought ID not saved to user");
 
         //Check that ID saved to user's thoughts is valid Thought ID
-        let valid = false;
-        let userId = users[0].thoughts[0].toString();
-        for(let i = 0; i < thoughts.length; i++){
-            if(thoughts[i]._id.toString() === userId){
-                valid = true;
-                break;
-            }
-        }
-        if(!valid) console.error("CREATE THOUGHT: Thought ID on user doesn't match any thought");
+        if(user.thoughts[0].toString() !== thought._id.toString()) console.errror("CREATE THOUGHT: Thought ID on user doesn't match thought");
         
         //Check for valid date
         try{
