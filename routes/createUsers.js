@@ -2,41 +2,37 @@ const axios = require("axios");
 
 const User = require("../models/user.js");
 
+const {clearDb} = require("../testData.js");
+
 module.exports = {
     run: async function(){
-        let promises = [];
-
-        promises.push(axios({
+        let response = await axios({
             url: "http://localhost:8000/api/users",
             method: "post",
             data: {
                 username: "Lucius Cornelius Sulla Felix",
                 email: "sulla@mail.com"
             }
-        }));
+        });
 
-        promises.push(axios({
-            url: "http://localhost:8000/api/users",
-            method: "post",
-            data: {
-                username: "Gaius Marius",
-                email: "marius@mail.com"
-            }
-        }));
-
-        return Promise.all(promises);
+        await this.test(response.data);
     },
 
-    test: function(response, userData){
-        if(userData.length === 0) console.error("CREATE USER: Users not added to database");
-        if(userData.length < 2) console.error("CREATE USER: Only one user created");
-        if(userData[0].username !== "Lucius Cornelius Sulla Felix") console.error("CREATE USER: Username incorrect");
-        if(userData[0].email !== "sulla@mail.com") console.error("CREATE USER: Email incorrect");
+    test: async function(response){
+        let user = await User.findOne({});
 
         try{
-            new User(response[0]);
+            if(users.length < 1) console.error("CREATE USER: User not added to database");
+            if(user.username !== "Lucius Cornelius Sulla Felix") console.error("CREATE USER: Username incorrect");
+            if(user.email !== "sulla@mail.com") console.error("CREATE USER: Email incorrect");
+        }catch(e){};
+
+        try{
+            new User(response);
         }catch(e){
             console.error("CREATE USER: User creation does not respond with user data");
         }
+
+        await clearDb();
     }
 }

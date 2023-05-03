@@ -2,15 +2,23 @@ const axios = require("axios");
 
 const Thought = require("../models/thought.js");
 
+const {createUser, clearDb} = require("../testData.js");
+
 module.exports = {
+    setup: async function(){
+        return [await createUser(), await createUser()];
+    },
+
     run: async function(ids){
+        let users = await this.setup();
+
         let promises = [];
 
         promises.push(axios({
             url: "http://localhost:8000/api/thoughts",
             method: "post",
             data: {
-                userId: ids[0],
+                userId: user[0]._id.toString(),
                 thoughtText: "No friend ever served me, and no enemy ever wronged me, whom I have not repaid in full.",
                 username: "Sulla"
             }
@@ -20,13 +28,13 @@ module.exports = {
             url: "http://localhost:8000/api/thoughts",
             method: "post",
             data: {
-                userId: ids[1],
+                userId: users[1]._id.toString(),
                 thoughtText: "The law speaks too softly to be heard amidst the din of arms.",
                 username: "Marius"
             }
         }));
 
-        return Promise.all(promises);
+        this.test(Promise.all(promises));
     },
 
     test: function(response, thoughts, users){
@@ -60,5 +68,7 @@ module.exports = {
         }catch(e){
             console.error("CREATE THOUGHT: Thought creation does not respond with thought data.");
         }
+
+        clearDb();
     }
 }
