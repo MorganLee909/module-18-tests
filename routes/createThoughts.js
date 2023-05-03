@@ -1,5 +1,6 @@
 const axios = require("axios");
 
+const User = require("../models/user.js");
 const Thought = require("../models/thought.js");
 
 const {createUser, clearDb} = require("../testData.js");
@@ -12,7 +13,7 @@ module.exports = {
     run: async function(){
         let users = await this.setup();
 
-        let response = axios({
+        let response = await axios({
             url: "http://localhost:8000/api/thoughts",
             method: "post",
             data: {
@@ -30,7 +31,7 @@ module.exports = {
         let thought = await Thought.findOne({});
 
         //Check for correct data
-        if(thought.thoughtText.length <= 0) console.error("CREATE THOUGHT: Thought text not saved");
+        if(thought.thoughtText?.length <= 0) console.error("CREATE THOUGHT: Thought text not saved");
         if(thought.username.length <= 0) console.error("CREATE THOUGHT: Thought username not saved");
 
         //Check that thought ID is saved to user
@@ -41,18 +42,18 @@ module.exports = {
         
         //Check for valid date
         try{
-            new Date(thoughts[0].createdAt);
+            new Date(thought.createdAt);
         }catch(e){
             console.error("CREATE THOUGHT: Created at doesn't exist or is not a date");
         }
 
         //Check that response contains thought data
         try{
-            new Thought(response[0]);
+            new Thought(response);
         }catch(e){
             console.error("CREATE THOUGHT: Thought creation does not respond with thought data.");
         }
 
-        clearDb();
+        await clearDb();
     }
 }

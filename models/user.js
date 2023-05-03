@@ -13,4 +13,4 @@ const UserSchema = new mongoose.Schema({
     friends: []
 });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("User", UserSchema,);

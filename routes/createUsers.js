@@ -19,7 +19,7 @@ module.exports = {
     },
 
     test: async function(response){
-        let user = await User.findOne({});
+        let user = await User.find({});
 
         try{
             if(users.length < 1) console.error("CREATE USER: User not added to database");

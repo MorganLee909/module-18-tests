@@ -80,6 +80,8 @@ let runTests = async ()=>{
     await mongoose.connect(`mongodb://127.0.0.1:27017/${process.argv[2]}`);
 
     await createUsers.run();
+    await createThoughts.run();
+    await createReactions.run();
 
     // let responseThoughts = await createThoughts.run([dbUsers[0]._id.toString(), dbUsers[1]._id.toString()]);
     // dbUsers = await User.find({});
