@@ -13,7 +13,7 @@ module.exports = {
     },
 
     run: async function(){
-        let thought = await this.setup();
+        let {thought} = await this.setup();
 
         let response = await axios({
             url: `http://localhost:8000/api/thoughts/${thought._id.toString()}`,
