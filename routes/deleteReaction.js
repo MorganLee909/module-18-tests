@@ -1,5 +1,7 @@
 const axios = require("axios");
 
+const Thought = require("../models/thought.js");
+
 const {createThought, clearDb} = require("../testData.js");
 
 module.exports = {
