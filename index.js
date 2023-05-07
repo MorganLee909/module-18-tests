@@ -28,6 +28,8 @@ let runTests = async ()=>{
     await getAllUsers.run();
     await getAllThoughts.run();
     await getSingleUser.run();
+    await getSingleThought.run();
+    await deleteReaction.run();
 
     console.error("ALL TESTS HAVE RUN");
     mongoose.disconnect();

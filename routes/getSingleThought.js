@@ -24,10 +24,12 @@ module.exports = {
             method: "get"
         });
 
-        this.test(response, testThought);
+        await this.test(response, testThought);
     },
 
-    test: function(response, thought){
+    test: async function(response, thought){
         if(response._id.toString() !== thought._id.toString()) console.error("GET SINGLE THOUGHT: Response does not match thought");
+
+        await clearDb();
     }
 }
