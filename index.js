@@ -32,6 +32,7 @@ let runTests = async ()=>{
     await deleteReaction.run();
     await deleteThought.run();
     await deleteFriend.run();
+    await deleteUser.run();
 
     console.error("ALL TESTS HAVE RUN");
     mongoose.disconnect();
