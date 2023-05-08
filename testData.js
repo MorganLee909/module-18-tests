@@ -35,7 +35,7 @@ module.exports = {
         if(reactions){
             let rand = Math.floor(Math.random() * 5) + 1;
             for(let i = 0; i < rand; i++){
-                thought.push({
+                thought.reactions.push({
                     reactionId: new mongoose.Types.ObjectId(),
                     reactionBody: faker.lorem.sentence(),
                     username: faker.internet.userName(),

@@ -7,16 +7,22 @@ module.exports = {
         let thoughtProms = [];
 
         for(let i = 0; i < 5; i++){
-            thoughtProms.push(createUser());
+            thoughtProms.push(createThought());
         }
 
-        return await Promise.all(thoughtProms);
+
+
+        let data = await Promise.all(thoughtProms);
+        let thoughts = [];
+        for(let i = 0; i < data.length; i++){
+            thoughts.push(data[i].thought);
+        }
+        return thoughts;
     },
 
     run: async function(){
-        thoughts = this.setup();
-
-        let rand = Math.floor(Math.random * thoughts.length);
+        let thoughts = await this.setup();
+        let rand = Math.floor(Math.random() * thoughts.length);
         let testThought = thoughts[rand];
 
         let response =  await axios({
@@ -24,7 +30,7 @@ module.exports = {
             method: "get"
         });
 
-        await this.test(response, testThought);
+        await this.test(response.data, testThought);
     },
 
     test: async function(response, thought){

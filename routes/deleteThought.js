@@ -13,19 +13,20 @@ module.exports = {
             thoughtProms.push(createThought());
         }
 
-        return await Promise.all(thoughtProms);
-    },
-
-    run: async function(thoughtId){
-        let data = await this.setup();
-        let users = [];
+        let data = await Promise.all(thoughtProms);
         let thoughts = [];
+        let users = [];
         for(let i = 0; i < data.length; i++){
-            users.push(data[i].user);
             thoughts.push(data[i].thought);
+            users.push(data[i].user);
         }
 
-        let rand = Math.floor(Math.random * thoughts.length);
+        return {thoughts, users};
+    },
+
+    run: async function(){
+        let {thoughts, users} = await this.setup();
+        let rand = Math.floor(Math.random() * thoughts.length);
         let thought = thoughts[rand];
 
         await axios({

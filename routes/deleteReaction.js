@@ -12,10 +12,16 @@ module.exports = {
             thoughtProms.push(createThought(true));
         }
 
-        return await Promise.all(thoughtProms);
+        let data = await Promise.all(thoughtProms);
+        let thoughts = [];
+        for(let i = 0; i < data.length; i++){
+            thoughts.push(data[i].thought);
+        }
+
+        return thoughts;
     },
 
-    run: async function(thoughtId, reactionId){
+    run: async function(){
         let thoughts = await this.setup();
 
         let rand = Math.floor(Math.random() * thoughts.length);
