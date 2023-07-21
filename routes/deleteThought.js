@@ -29,10 +29,16 @@ module.exports = {
         let rand = Math.floor(Math.random() * thoughts.length);
         let thought = thoughts[rand];
 
-        await axios({
-            url: `http://localhost:8000/api/thoughts/${thought._id.toString()}`,
-            method: "delete"
-        });
+        try{
+            await axios({
+                url: `http://localhost:8000/api/thoughts/${thought._id.toString()}`,
+                method: "delete",
+                timeout: 1000
+            });
+        }catch(e){
+            // let data = e.response ? e.response.data : "error";
+            // console.error("DELETE THOUGHT (response):", data);
+        }
 
         await this.test(thought._id, users[rand]._id);
     },

@@ -12,13 +12,20 @@ module.exports = {
     run: async function(){
         let users = await this.setup();
 
-        let response = await axios({
-            url: "http://localhost:8000/api/users",
-            method: "get"
-        });
+        let response = {};
+        try{
+            response = await axios({
+                url: "http://localhost:8000/api/users",
+                method: "get",
+                timeout: 1000
+            });
+        }catch(e){
+            // let data = e.response ? e.response.data : "error";
+            // console.error("GET ALL USERS (response):", data);
+        }
 
         let rand = Math.floor(Math.random() * users.length);
-        await this.test(response.data, users[rand]._id)
+        await this.test(response.data, users[rand]._id);
     },
 
     test: async function(response, testUser){

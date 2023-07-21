@@ -23,16 +23,20 @@ module.exports = {
 
     run: async function(){
         let thoughts = await this.setup();
-
         let rand = Math.floor(Math.random() * thoughts.length);
         let thought = thoughts[rand];
         rand = Math.floor(Math.random() * thought.reactions.length);
 
-
-        await axios({
-            url: `http://localhost:8000/api/thoughts/${thought._id.toString()}/reactions/${thought.reactions[rand].reactionId.toString()}`,
-            method: "delete"
-        });
+        try{
+            let thing = await axios({
+                url: `http://localhost:8000/api/thoughts/${thought._id.toString()}/reactions/${thought.reactions[rand].reactionId.toString()}`,
+                method: "delete",
+                timeout: 1000
+            });
+        }catch(e){
+            // let data = e.response ? e.response.data : "error";
+            // console.error("DELETE REACTION (response):", data);
+        }
 
         await this.test(thought, thought.reactions[rand]._id);
     },

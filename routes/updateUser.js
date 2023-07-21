@@ -12,17 +12,25 @@ module.exports = {
         return await createUser();
     },
 
-    run: async function(userId){
+    run: async function(){
         let user = await this.setup();
 
-        let response = await axios({
-            url: `http://localhost:8000/api/users/${(await user)._id.toString()}`,
-            method: "put",
-            data: {
-                username: this.username,
-                email: this.email
-            }
-        });
+        let response = {};
+        try{
+            response = await axios({
+                url: `http://localhost:8000/api/users/${(await user)._id.toString()}`,
+                method: "put",
+                timeout: 1000,
+                data: {
+                    username: this.username,
+                    email: this.email
+                }
+            });
+
+        }catch(e){
+            // let data = e.response ? e.response.data : "error";
+            // console.error("UPDATE USER (response):", data);
+        }
 
         await this.test(response.data, user._id);
     },

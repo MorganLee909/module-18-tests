@@ -19,34 +19,47 @@ module.exports = {
     run: async function(){
         let thoughts = await this.setup();
 
-        let response = await axios({
-            url: "http://localhost:8000/api/thoughts",
-            method: "get"
-        });
+        let response = {};
+        try{
+            response = await axios({
+                url: "http://localhost:8000/api/thoughts",
+                method: "get",
+                timeout: 1000
+            });
+        }catch(e){
+            // let data = e.response ? e.response.data : "error";
+            // console.error("GET ALL THOUGHTS (response):", data);
+        }
 
         let rand = Math.floor(Math.random() * thoughts.length);
         await this.test(response.data, thoughts[rand]._id);
     },
 
     test: async function(response, randThoughtId){
-        let thoughts = await Thought.find({});
-        let dbThought = await Thought.findOne({_id: randThoughtId});
+        if(!response){
+            console.error("GET ALL THOUGHTS: No response");
+        }else if(!Array.isArray(response)){
+            console.error("GET ALL THOUGHTS: Doesn't respond with an array");
+        }else{
+            let thoughts = await Thought.find({});
+            let dbThought = await Thought.findOne({_id: randThoughtId});
 
-        //Check response data
-        if(response.length === 0) console.error("GET ALL THOUGHTS: Empty response");
-        if(response.length !== thoughts.length) console.error("GET ALL THOUGHTS: Response does not match database contents");
+            //Check response data
+            if(response.length === 0) console.error("GET ALL THOUGHTS: Empty response");
+            if(response.length !== thoughts.length) console.error("GET ALL THOUGHTS: Response does not match database contents");
 
-        //Check data of random thought
-        let responseThought = response.find(r => r._id.toString() === dbThought._id.toString());
-        if(!responseThought) console.error("GET ALL THOUGHTS: Cannot find test thought in response");
-        if(responseThought.thoughtText !== dbThought.thoughtText) console.error("GET ALL THOUGHTS: Test thought text does not match database");
-        if(responseThought.username !== dbThought.username) console.error("GET ALL THOUGHT: Test thought username does not match database");
+            //Check data of random thought
+            let responseThought = response.find(r => r._id.toString() === dbThought._id.toString());
+            if(!responseThought) console.error("GET ALL THOUGHTS: Cannot find test thought in response");
+            if(responseThought.thoughtText !== dbThought.thoughtText) console.error("GET ALL THOUGHTS: Test thought text does not match database");
+            if(responseThought.username !== dbThought.username) console.error("GET ALL THOUGHT: Test thought username does not match database");
 
-        //Check that response contains valid thoughts
-        try{
-            new Thought(response[0]);
-        }catch(e){
-            console.error("GET ALL THOUGHTS: Response does not contain thought objects")
+            //Check that response contains valid thoughts
+            try{
+                new Thought(response[0]);
+            }catch(e){
+                console.error("GET ALL THOUGHTS: Response does not contain thought objects")
+            }
         }
 
         await clearDb();

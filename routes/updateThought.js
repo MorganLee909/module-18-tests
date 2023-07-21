@@ -15,14 +15,21 @@ module.exports = {
     run: async function(){
         let {thought} = await this.setup();
 
-        let response = await axios({
-            url: `http://localhost:8000/api/thoughts/${thought._id.toString()}`,
-            method: "put",
-            data: {
-                thoughtText: this.thoughtText,
-                username: this.username
-            }
-        });
+        let response = {};
+        try{
+            response = await axios({
+                url: `http://localhost:8000/api/thoughts/${thought._id.toString()}`,
+                method: "put",
+                timeout: 1000,
+                data: {
+                    thoughtText: this.thoughtText,
+                    username: this.username
+                }
+            });
+        }catch(e){
+            // let data = e.response ? e.response.data : "error";
+            // console.error("UPDATE THOUGHT (response):", data);
+        }
 
         await this.test(response.data, thought._id);
     },

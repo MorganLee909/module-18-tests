@@ -15,7 +15,6 @@ const deleteThought = require("./routes/deleteThought.js");
 const deleteFriend = require("./routes/deleteFriend.js");
 const deleteUser = require("./routes/deleteUser.js");
 
-
 let runTests = async ()=>{
     await mongoose.connect(`mongodb://127.0.0.1:27017/${process.argv[2]}`);
 

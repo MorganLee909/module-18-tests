@@ -1,0 +1,6 @@
+When Thought not created, it just says that "created at" doesn't exist.
+When adding friend fails, I get no notification
+DELETE REACTION: Thought array size unchanged (bad note, just say the route doesn't work)
+False positive: DELETE REACTION
+False negative: DELETE USER
+False negative: ADD USER

@@ -16,26 +16,31 @@ module.exports = {
         return await Promise.all(thoughtProms);
     },
 
-    run: async function(userId){
+    run: async function(){
         let data = await this.setup();
         let users = [];
         for(let i = 0; i < data.length; i++){
             users.push(data[i].user);
         }
-
         let rand = Math.floor(Math.random() * data.length);
 
-        await axios({
-            url: `http://localhost:8000/api/users/${users[rand]._id.toString()}`,
-            method: "delete"
-        });
+        try{
+            await axios({
+                url: `http://localhost:8000/api/users/${users[rand]._id.toString()}`,
+                method: "delete",
+                timeout: 1000
+            });
+        }catch(e){
+            // let data = e.response ? e.response.data : "error";
+            // console.error("DELETE USER (response):", data);
+        }
 
         await this.test(users[rand]._id, users[rand].thoughts[0]);
     },
 
     test: async function(userId, thoughtId){
         let user = await User.findOne({_id: userId});
-        let thought = await Thought.find({_id: thoughtId});
+        let thought = await Thought.findOne({_id: thoughtId});
         
         try{
             if(user !== null) console.error("DELETE USER: User not removed from database.");
