@@ -30,10 +30,7 @@ module.exports = {
                 method: "delete",
                 timeout: 1000
             });
-        }catch(e){
-            // let data = e.response ? e.response.data : "error";
-            // console.error("DELETE USER (response):", data);
-        }
+        }catch(e){}
 
         await this.test(users[rand]._id, users[rand].thoughts[0]);
     },
@@ -47,6 +44,7 @@ module.exports = {
             if(thought === null) console.error("BONUS: Deleting user also deletes user's thoughts");
         }catch(e){}
 
+        console.log();
         await clearDb();
     }
 }

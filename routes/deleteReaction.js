@@ -33,10 +33,7 @@ module.exports = {
                 method: "delete",
                 timeout: 1000
             });
-        }catch(e){
-            // let data = e.response ? e.response.data : "error";
-            // console.error("DELETE REACTION (response):", data);
-        }
+        }catch(e){}
 
         await this.test(thought, thought.reactions[rand]._id);
     },
@@ -54,6 +51,7 @@ module.exports = {
             }
         }catch(e){}
 
+        console.log();
         await clearDb();
     }
 }

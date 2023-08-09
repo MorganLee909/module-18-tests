@@ -18,10 +18,7 @@ module.exports = {
                 method: "post",
                 timeout: 1000
             });
-        }catch(e){
-            // let data = e.response ? e.response.data : "error";
-            // console.error("ADD FRIEND (response):", data);
-        }
+        }catch(e){}
 
         await this.test(users[0]._id, users[1]._id);
     },
@@ -35,6 +32,7 @@ module.exports = {
             if(user.friends[0]._id.toString() !== friend._id.toString()) console.error("ADD FRIEND: Incorrect ID added to friends list");
         }catch(e){}
 
+        console.log();
         await clearDb();
     }
 }

@@ -27,10 +27,7 @@ module.exports = {
                 }
             });
 
-        }catch(e){
-            // let data = e.response ? e.response.data : "error";
-            // console.error("UPDATE USER (response):", data);
-        }
+        }catch(e){}
 
         await this.test(response.data, user._id);
     },
@@ -51,6 +48,7 @@ module.exports = {
             console.error("UPDATE USER: response does not contain user data");
         }
 
+        console.log();
         await clearDb();
     }
 }

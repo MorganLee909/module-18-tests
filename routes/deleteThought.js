@@ -35,10 +35,7 @@ module.exports = {
                 method: "delete",
                 timeout: 1000
             });
-        }catch(e){
-            // let data = e.response ? e.response.data : "error";
-            // console.error("DELETE THOUGHT (response):", data);
-        }
+        }catch(e){}
 
         await this.test(thought._id, users[rand]._id);
     },
@@ -52,6 +49,7 @@ module.exports = {
             if(user.thoughts[0].toString() === thoughtId.toString()) console.error("DELETE THOUGHT: Thought not removed from user");
         }catch(e){}
 
+        console.log();
         await clearDb();
     }
 }

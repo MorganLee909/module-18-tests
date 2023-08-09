@@ -52,6 +52,7 @@ module.exports = {
             if(!response._id) console.error("CREATE THOUGHT: Thought creation does not respond with thought data.");
         }catch(e){}
 
+        console.log();
         await clearDb();
     }
 }

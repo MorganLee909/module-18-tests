@@ -23,10 +23,7 @@ module.exports = {
                 method: "delete",
                 timeout: 1000
             });    
-        }catch(e){
-            // let data = e.response ? e.response.data : "error";
-            // console.error("DELETE FRIEND (response):", data);
-        }
+        }catch(e){}
 
         await this.test(users);
     },
@@ -41,6 +38,7 @@ module.exports = {
             }
         }
 
+        console.log();
         await clearDb();
     }
 }
